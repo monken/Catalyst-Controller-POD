@@ -1,5 +1,10 @@
 Revision history for Catalyst-Controller-POD
 
+0.02004  2009-05-04
+		 - JS cleanups
+		 - filtered results do not expand by default
+		 - moved to git repository
+
 0.02003  2009-05-03
          - Works with Catalyst 5.8 (reported by T. Hosaka)
 

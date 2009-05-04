@@ -47,34 +47,6 @@ POD.scrollToSection = function(tab, section, module){
     }
 }
 
-POD.filterTree = function (e){
-	var text = e.target.value;
-	var filter = POD.filter;
-	var tree = POD.tree;
-	if(!text){
-		filter.clear();
-		tree.collapseAll();
-		return;
-	}
-	//tree.expandAll();
-	
-	var re = new RegExp(Ext.escapeRe(text), 'i');
-	filter.filterBy(function(n){
-		var re = new RegExp(Ext.escapeRe(text), 'i');
-		var found = false;
-		var cascade = function(child) {
-			if(re.test(child.attributes.name)) {
-				found = true;
-				return false;
-			}
-			child.eachChild(cascade);
-		};
-		n.eachChild(cascade);
-		return re.test(n.attributes.name) || found;
-	});
-	
-}
-
 POD.reloadTree = function(e) {
 	if(!e.target.value) {
 		POD.tree.getLoader().dataUrl = '[% root %]/modules';
@@ -97,7 +69,12 @@ containerScroll: true,
 listeners:  {
 	"click" : function(node) { POD.addTab(node.attributes.name, "[% root %]/module/"+node.attributes.name) }},
 loader: new Ext.tree.TreeLoader({
-	dataUrl:'[% root %]/modules'
+	dataUrl:'[% root %]/modules',
+	autoLoad: false,
+	listeners: { 
+	    'beforeload' : function() { POD.tree.getEl().mask('Modules are being loaded') }, 
+	    'load' : function() { POD.tree.getEl().unmask() }
+	}
 
 }),
 tbar: [new Ext.form.TextField({
@@ -118,8 +95,7 @@ tbar: [new Ext.form.TextField({
  	 	   iconCls:"icon-collapse-all"}
  ]
 }) ;
-var expandTree = function() { if(POD.tree.getLoader().dataUrl == '[% root %]/modules') return; POD.tree.expandAll() };
-POD.tree.getLoader().on("load", expandTree);
+
 var root = new Ext.tree.AsyncTreeNode({
 	text: 'mods',
 	expanded:true,
@@ -280,7 +256,7 @@ POD.tabs =
 				html :"<div style=\"width:500px; margin:50px\" class='x-box-blue' id='move-me'> "
 						+ "<div class=\"x-box-tl\"><div class=\"x-box-tr\"><div class=\"x-box-tc\"></div></div></div> "
 						+ "<div class=\"x-box-ml\"><div class=\"x-box-mr\"><div class=\"x-box-mc\"> "
-						+ "<h3 style=\"margin-bottom:5px;\">Search CPAN</h3> "
+						+ "<h3 style=\"margin-bottom:5px;\">Search the CPAN</h3> "
 						+ " <input type=\"text\" name=\"search\" id=\"search\" class=\"x-form-text\" style='font-size: 20px; height: 31px'/>"
 						+ " <div style=\"padding-top:4px;\">Type at least three characters</div>"
 						+ " </div></div></div>"
@@ -307,7 +283,7 @@ Ext.onReady(function(){
     	typeAhead :false,
     	minChars :3,
     	queryParam :'value',
-    	emptyText: "Search CPAN for modules",
+    	emptyText: "Search the CPAN for modules",
     	loadingText :'Searching ...',
     	width :470,
     	pageSize :50,
@@ -326,6 +302,5 @@ Ext.onReady(function(){
 
     });
     Ext.getDom('search').focus(100, true);
-
 
 });

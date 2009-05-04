@@ -26,6 +26,7 @@ __PACKAGE__->config(
  namespaces => ["*"]
 );
 
+
 =head1 NAME
 
 Catalyst::Controller::POD - Serves PODs right from your Catalyst application
@@ -35,13 +36,13 @@ Catalyst::Controller::POD - Serves PODs right from your Catalyst application
 Version 0.02
 
 =cut
-our $VERSION = '0.02003';
+our $VERSION = '0.02004';
 
 =head1 SYNOPSIS
 
 Create a new controller and paste this code:
 
-  package MyApp::YourNewController;  # <-- Change this to your controller
+  package MyApp::Controller::YourNewController;  # <-- Change this to your controller
   
   use strict;
   use warnings;
@@ -122,7 +123,7 @@ sub search : Local {
 	);
 	my $ua = new LWP::UserAgent;
 	$ua->timeout(15);
-	$c->log->debug("get url ".$url->canonical);
+	$c->log->debug("get url ".$url->canonical) if($c->debug);
 	my $response = $ua->get($url);
 	my $xml = $response->content;
 	my $data;
@@ -154,16 +155,16 @@ sub module : Local {
 	my $pom;
 
 	if ( $name2path->{$module} ) {
-		$c->log->debug("Getting POD from local store");
+		$c->log->debug("Getting POD from local store") if($c->debug);
 		$view->_toc( _get_toc( $name2path->{$module} ) );
 		$pom = $parser->parse_file( $name2path->{$module} )
 		  || die $parser->error(), "\n";
 	} else {
-		$c->log->debug("Getting POD from CPAN");
+		$c->log->debug("Getting POD from CPAN") if($c->debug);
 		my $html = get( "http://search.cpan.org/perldoc?" . $module );
 		$html =~ s/.*<a href="(.*?)">Source<\/a>.*/$1/s;
 		my $source = get( "http://search.cpan.org" . $html );
-		$c->log->debug("Get source from http://search.cpan.org" . $html);
+		$c->log->debug("Get source from http://search.cpan.org" . $html) if($c->debug);
 		$view->_toc( _get_toc( $source ) );
 		$pom = $parser->parse_text($source)
 		  || die $parser->error(), "\n";
@@ -320,7 +321,7 @@ Write more tests!
 
 =head1 AUTHOR
 
-Moritz Onken, C<< <onken at houseofdesign.de> >>
+Moritz Onken <onken@houseofdesign.de>
 
 =head1 BUGS
 

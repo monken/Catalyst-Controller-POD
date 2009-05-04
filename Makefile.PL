@@ -4,6 +4,8 @@ use inc::Module::Install;
 name 'Catalyst-Controller-POD';
 all_from 'lib/Catalyst/Controller/POD.pm';
 
+repository 'http://github.com/monken/Catalyst-Controller-POD/tree/master';
+
 # Specific dependencies
 requires 'Test::More'            => 0;
 requires 'Pod::Simple'           => 0;
@@ -21,7 +23,10 @@ requires 'Class::Accessor::Fast' => "0.31";
 requires 'Catalyst::Controller'  => 0;
 requires 'Pod::POM::View::TOC'   => "0.02";
 requires 'parent'                => 0;
-  test_requires 'Test::More'     => '0.42';
+
+test_requires 'Test::More'     => '0.42';
 test_requires 'Test::WWW::Mechanize::Catalyst' => "0.41";
-install_share();
+
+install_share;
+
 WriteAll;
