@@ -1,0 +1,4 @@
+inc/
+*.old
+*.gz
+*.tgz
