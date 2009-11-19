@@ -36,7 +36,7 @@ Catalyst::Controller::POD - Serves PODs right from your Catalyst application
 Version 0.02
 
 =cut
-our $VERSION = '0.02004';
+our $VERSION = '0.02005';
 
 =head1 SYNOPSIS
 
@@ -274,7 +274,7 @@ sub _root {
 
 sub new {
 	my $self = shift;
-	my $new  = $self->NEXT::new(@_);
+	my $new  = $self->next::method(@_);
 	my $path;
 	eval { $path = dist_file( 'Catalyst-Controller-POD', 'docs.js' ); };
 	if ($@) {

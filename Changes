@@ -1,5 +1,9 @@
 Revision history for Catalyst-Controller-POD
 
+
+0.02005  2009-05-07
+         - use next instead of NEXT
+
 0.02004  2009-05-04
 		 - JS cleanups
 		 - filtered results do not expand by default
