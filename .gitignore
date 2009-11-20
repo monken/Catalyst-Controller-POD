@@ -1,4 +1,9 @@
 inc/
+MANIFEST
+META.yml
+Makefile
+blib/
+pm_to_blibinc/
 *.old
 *.gz
 *.tgz
