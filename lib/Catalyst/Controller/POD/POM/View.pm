@@ -85,15 +85,17 @@ sub view_seq_link_transform_path {
 	my($self,$page) = @_;
 	return $self->_root."/module/$page";	
 }
+{ 
+    no warnings 'redefine';
+    sub Pod::POM::View::HTML::make_href  {
+        my($url, $title) = @_;
+    	if (!defined $url) {
+            $url = "$title";
+        }
 
-sub Pod::POM::View::HTML::make_href  {
-    my($url, $title) = @_;
-	if (!defined $url) {
-        $url = "$title";
+        $title = $url unless defined $title;
+        return qq{<a href="$url" onclick="return POD.proxyLink(this)">$title</a>};
     }
-
-    $title = $url unless defined $title;
-    return qq{<a href="$url" onclick="return POD.proxyLink(this)">$title</a>};
 }
 
 sub view_head1 {

@@ -1,5 +1,7 @@
 Revision history for Catalyst-Controller-POD
 
+0.02006  2009-11-20
+		 - fixed another warning (#51681)
 
 0.02005  2009-11-20
          - use next instead of NEXT
