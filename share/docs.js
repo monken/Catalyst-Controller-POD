@@ -1,5 +1,18 @@
 Ext.namespace("POD");
 
+// Too much regex for my liking.  A JQuery plugin would be cleaner, but this works.
+// http://stackoverflow.com/questions/901115/get-querystring-with-jquery/901144#901144
+POD.qsVal = function ( name ) {
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
 POD.addTab = function (title, url, section,module) {
 	if(Ext.getCmp("tab-"+title)) {
 		Ext.getCmp("tab-"+title).show();
@@ -256,6 +269,16 @@ POD.tabs =
         tools: [{id: "print", handler: function() { window.open("[% root %]/module/"+tabs.getActiveTab().id.replace(/tab-/,"")); }},
                 {id: "close",handler: function (){ tabs.items.each(function(el){if(new RegExp("tab-").test(el.id)) tabs.remove(el)}) }}],
     });
+
+//
+// For some reason the following order matters.
+// 
+
+// Display documentation for the permalink
+var permalink = POD.qsVal("permalink");
+if(permalink) {
+	POD.addTab(permalink, "[% root %]/module/" + permalink);
+}
 
 // Show the home tab only if we're configured to 
 if([% show_home_tab %]) {

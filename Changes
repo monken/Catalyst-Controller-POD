@@ -4,6 +4,7 @@ NEXT     2010-XX-XX
          - Added additional configuration options:
            expanded_module_tree, home_tab_content, initial_module,
            show_home_tab (Tristan Pratt)
+         - Added permalinks (Tristan Pratt)
 
 0.02005  2009-11-20
          - use next instead of NEXT

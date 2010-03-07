@@ -4,6 +4,12 @@ margin: 5px;
 padding: 5px;
 }
 
+#permalink {
+  margin: 5px;
+  padding: 5px;
+  float: right;
+}
+
 .pod ol {
 	list-style: decimal;
 	margin-left:40px;

@@ -46,6 +46,7 @@ sub view_begin {
 sub view_pod {
     my ($self, $pod) = @_;
     my $toc = $self->_toc;
+    my $permalink = $self->_root . "?permalink=" . $self->_module; # There has to be a better way
     return qq~
 <html>
 <head>
@@ -54,6 +55,7 @@ sub view_pod {
 </head>
 <body bgcolor=\"#ffffff\">
 <script type="text/javascript">POD.setTOC($toc);</script>
+<div id="permalink"><a href="$permalink">Permalink</a></div>
 <div class="pod">
 ~
  	. $pod->content->present($self)
