@@ -1,10 +1,13 @@
 package Catalyst::Controller::POD::POM::View;
+use strict;
+use warnings;
 
 use base "Pod::POM::View::HTML";
 
 my $HTML_PROTECT = 1;
 
     sub _root {
+      no strict 'refs';
         my $self = shift;
         if(@_) {
             $self->{_root} = $_[0];
@@ -14,6 +17,7 @@ my $HTML_PROTECT = 1;
 
 
     sub _module {
+      no strict 'refs';
         my $self = shift;
         if(@_) {
             $self->{_module} = $_[0];
@@ -21,6 +25,7 @@ my $HTML_PROTECT = 1;
         return $self->{_module};
     }
     sub _toc {
+      no strict 'refs';
         my $self = shift;
         if(@_) {
             $self->{_toc} = $_[0];
@@ -86,7 +91,9 @@ sub view_seq_link_transform_path {
 	return $self->_root."/module/$page";	
 }
 
-sub Pod::POM::View::HTML::make_href  {
+{
+  no warnings 'redefine';
+  sub Pod::POM::View::HTML::make_href  {
     my($url, $title) = @_;
 	if (!defined $url) {
         $url = "$title";
@@ -94,7 +101,8 @@ sub Pod::POM::View::HTML::make_href  {
 
     $title = $url unless defined $title;
     return qq{<a href="$url" onclick="return POD.proxyLink(this)">$title</a>};
-}
+  }
+  }
 
 sub view_head1 {
     my ($self, $head1) = @_;
