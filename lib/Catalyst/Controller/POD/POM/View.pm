@@ -1,39 +1,43 @@
 package Catalyst::Controller::POD::POM::View;
+use strict;
+use warnings;
 
 use base "Pod::POM::View::HTML";
 
 my $HTML_PROTECT = 1;
 
-    sub _root {
-        my $self = shift;
-        if(@_) {
-            $self->{_root} = $_[0];
-        }
-        return $self->{_root};
+sub _root {
+    no strict 'refs';
+    my $self = shift;
+    if(@_) {
+        $self->{_root} = $_[0];
     }
+    return $self->{_root};
+}
 
 
-    sub _module {
-        my $self = shift;
-        if(@_) {
-            $self->{_module} = $_[0];
-        }
-        return $self->{_module};
+sub _module {
+    no strict 'refs';
+    my $self = shift;
+    if(@_) {
+        $self->{_module} = $_[0];
     }
-    sub _toc {
-        my $self = shift;
-        if(@_) {
-            $self->{_toc} = $_[0];
-        }
-        return $self->{_toc};
+    return $self->{_module};
+}
+sub _toc {
+    no strict 'refs';
+    my $self = shift;
+    if(@_) {
+        $self->{_toc} = $_[0];
     }
+    return $self->{_toc};
+}
 
 sub view_begin {
     my ($self, $begin) = @_;
     return '' unless $begin->format() =~ /\bhtml\b/;
     $HTML_PROTECT = 1;
     my $output = $begin->content();
-    #$HTML_PROTECT++;
     return $output;
 }
 
@@ -41,6 +45,7 @@ sub view_begin {
 sub view_pod {
     my ($self, $pod) = @_;
     my $toc = $self->_toc;
+    my $permalink = $self->_root . "?permalink=" . $self->_module; # There has to be a better way
     return qq~
 <html>
 <head>
@@ -49,41 +54,42 @@ sub view_pod {
 </head>
 <body bgcolor=\"#ffffff\">
 <script type="text/javascript">POD.setTOC($toc);</script>
+<div id="permalink"><a href="$permalink">Permalink</a></div>
 <div class="pod">
 ~
- 	. $pod->content->present($self)
+   . $pod->content->present($self)
         . "</div></body></html>\n";
 }
 
 sub view_verbatim {
     my ($self, $text) = @_;
-    
+
     for ($text) {
-	s/&/&amp;/g;
-	s/</&lt;/g;
-	s/>/&gt;/g;
+        s/&/&amp;/g;
+        s/</&lt;/g;
+        s/>/&gt;/g;
     }
     foreach my $i (1..10) {
-    	my $t;
-    	my $last = 0;
-    	for(split(/\n/, $text)) {
-    		$_ =~ s/^(.)//;
-    		if($1 ne " ") {
-    			$last = 1;
-    			last;
-    		}
-    		$t .= $_.$/;
-    	}
-    	$text = $t unless($last);
-    	last if($last);
+        my $t;
+        my $last = 0;
+        for(split(/\n/, $text)) {
+            $_ =~ s/^(.)//;
+            if($1 ne " ") {
+                $last = 1;
+                last;
+            }
+            $t .= $_.$/;
+        }
+        $text = $t unless($last);
+        last if($last);
     }
-    
+
     return "<pre>$text</pre>\n\n";
 }
 
 sub view_seq_link_transform_path {
-	my($self,$page) = @_;
-	return $self->_root."/module/$page";	
+    my($self,$page) = @_;
+    return $self->_root."/module/$page";  
 }
 { 
     no warnings 'redefine';
@@ -105,7 +111,7 @@ sub view_head1 {
     $id =~ s/<.*?>//g;
     $id =~ s/'/\\'/g;
     return "<h1 id='$id'>$title</h1>\n\n"
-	. $head1->content->present($self);
+        . $head1->content->present($self);
 }
 
 
@@ -116,7 +122,7 @@ sub view_head2 {
     $id =~ s/<.*?>//g;
     $id =~ s/'/\\'/g;
     return "<h2 id='$id'>$title</h2>\n\n"
-	. $head2->content->present($self);
+        . $head2->content->present($self);
 }
 
 
@@ -127,7 +133,7 @@ sub view_head3 {
     $id =~ s/<.*?>//g;
     $id =~ s/'/\\'/g;
     return "<h3 id='$id'>$title</h3>\n\n"
-	. $head3->content->present($self);
+        . $head3->content->present($self);
 }
 
 
@@ -138,11 +144,7 @@ sub view_head4 {
     $id =~ s/<.*?>//g;
     $id =~ s/'/\\'/g;
     return "<h4 id='$id'>$title</h4>\n\n"
-	. $head4->content->present($self);
+        . $head4->content->present($self);
 }
-
-
-
-
 
 1;

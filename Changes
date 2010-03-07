@@ -1,16 +1,22 @@
 Revision history for Catalyst-Controller-POD
 
+0.02007  2010-03-07
+         - Added additional configuration options:
+           expanded_module_tree, home_tab_content, initial_module,
+           show_home_tab (Tristan Pratt)
+         - Added permalinks (Tristan Pratt)
+
 0.02006  2009-11-20
-		 - fixed another warning (#51681)
+         - fixed another warning (#51681)
 
 0.02005  2009-11-20
          - use next instead of NEXT
-		 - Added "not found" page for namespaces like DBIx
+         - Added "not found" page for namespaces like DBIx
 
 0.02004  2009-05-04
-		 - JS cleanups
-		 - filtered results do not expand by default
-		 - moved to git repository
+         - JS cleanups
+         - filtered results do not expand by default
+         - moved to git repository
 
 0.02003  2009-05-03
          - Works with Catalyst 5.8 (reported by T. Hosaka)
