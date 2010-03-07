@@ -19,13 +19,26 @@ use Catalyst::Controller::POD::Template;
 
 use base "Catalyst::Controller::POD::Search";
 
-__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir));
+__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree));
 
 __PACKAGE__->config(
- self => 1,
- namespaces => ["*"]
+ self                 => 1,
+ namespaces           => ["*"],
+ initial_module       => "",
+ show_home_tab        => 1,
+ expanded_module_tree => 0,
+ home_tab_content     => <<HTML,
+<div style="width:500px; margin:50px" class='x-box-blue' id='move-me'>
+<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
+<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc">
+<h3 style="margin-bottom:5px;">Search the CPAN</h3>
+<input type="text" name="search" id="search" class="x-form-text" style='font-size: 20px; height: 31px'/>
+<div style="padding-top:4px;">Type at least three characters</div>
+</div></div></div>
+<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>
+</div>
+HTML
 );
-
 
 =head1 NAME
 
@@ -75,11 +88,37 @@ Have a look at L<http://cpan.org/authors/id/P/PE/PERLER/pod-images/pod-encyclope
 
 =over
 
+=item dirs (Arrayref)
+
+Search for modules in these directories.
+
+Defaults to C<[]>.
+
+=item expanded_module_tree (Boolean)
+
+Expand the module browser tree on initial page load.
+
+Defaults to C<1>
+
+=item home_tab_content (String)
+
+HTML to be displayed in the Home tab.
+
+Defaults to the existing CPAN search box.
+
 =item inc (Boolean)
 
 Search for modules in @INC. Set it to 1 or 0.
 
 Defaults to C<0>.
+
+=item initial_module (String)
+
+If this option is specified, a tab displaying the perldoc for the given module
+will be opened on load.  Handy if you wish to disable the home tab and specify
+a specific module's perldoc as the initial page a user sees.
+
+Defaults to C<"">
 
 =item namespaces (Arrayref)
 
@@ -93,11 +132,11 @@ Search for modules in C<< $c->path_to( 'lib' ) >>.
 
 Defaults to C<1>.
 
-=item dirs (Arrayref)
+=item show_home_tab (Boolean)
 
-Search for modules in these directories.
+Show or hide the home tab.
 
-Defaults to C<[]>.
+Defaults to C<1>
 
 =head1 NOTICE
 
@@ -302,6 +341,11 @@ sub index : Path : Args(0) {
 	);
 }
 
+sub get_home_tab_content : Path("home_tab_content") {
+	my ( $self, $c ) = @_;
+	$c->response->body($self->home_tab_content);
+}
+
 sub static : Path("static") {
 	my ( $self, $c, @file ) = @_;
 	my $file = File::Spec->catfile(@file);
@@ -312,11 +356,19 @@ sub static : Path("static") {
 		$c->res->content_type('text/html; charset=utf-8');
 	} else {
 		if ( $file eq "docs.js" ) {
-			my $root = $self->_root($c);
-			$data =~ s/\[% root %\]/$root/g;
+			_replace_template_vars(\$data, "root",                       $self->_root($c));
+			_replace_template_vars(\$data, "initial_module",             $self->initial_module);
+			_replace_template_vars(\$data, "show_home_tab",              $self->show_home_tab ? "true" : "false");
+			_replace_template_vars(\$data, "expand_module_tree_on_load", $self->expanded_module_tree ? "true" : "false");
 		}
 		$c->response->body($data);
 	}
+}
+
+# A poor man's template module. 
+sub _replace_template_vars {
+	my ($data_ref, $var_name, $var_val) = @_;
+	$$data_ref =~ s/\[% $var_name %\]/$var_val/g;
 }
 
 =head1 TODO
@@ -326,6 +378,10 @@ Write more tests!
 =head1 AUTHOR
 
 Moritz Onken <onken@houseofdesign.de>
+
+=head1 CONTRIBUTORS
+
+Tristan Pratt
 
 =head1 BUGS
 

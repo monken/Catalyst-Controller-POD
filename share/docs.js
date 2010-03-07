@@ -72,8 +72,16 @@ loader: new Ext.tree.TreeLoader({
 	dataUrl:'[% root %]/modules',
 	autoLoad: false,
 	listeners: { 
-	    'beforeload' : function() { POD.tree.getEl().mask('Modules are being loaded') }, 
-	    'load' : function() { POD.tree.getEl().unmask() }
+		'beforeload' : function() { POD.tree.getEl().mask('Modules are being loaded') }, 
+		'load' : function() { 
+			POD.tree.getEl().unmask();
+			if([% expand_module_tree_on_load %]) {
+				var old = POD.tree.animate;
+				POD.tree.animate = false;
+				POD.tree.expandAll();
+				POD.tree.animate = old;
+			}
+		}
 	}
 
 }),
@@ -247,37 +255,30 @@ POD.tabs =
     	}},
         tools: [{id: "print", handler: function() { window.open("[% root %]/module/"+tabs.getActiveTab().id.replace(/tab-/,"")); }},
                 {id: "close",handler: function (){ tabs.items.each(function(el){if(new RegExp("tab-").test(el.id)) tabs.remove(el)}) }}],
-        items: [{
-			layout :'form',
-            title : "Home",
-            id : "search-box",
-			frame :false,
-			border :false,
-				html :"<div style=\"width:500px; margin:50px\" class='x-box-blue' id='move-me'> "
-						+ "<div class=\"x-box-tl\"><div class=\"x-box-tr\"><div class=\"x-box-tc\"></div></div></div> "
-						+ "<div class=\"x-box-ml\"><div class=\"x-box-mr\"><div class=\"x-box-mc\"> "
-						+ "<h3 style=\"margin-bottom:5px;\">Search the CPAN</h3> "
-						+ " <input type=\"text\" name=\"search\" id=\"search\" class=\"x-form-text\" style='font-size: 20px; height: 31px'/>"
-						+ " <div style=\"padding-top:4px;\">Type at least three characters</div>"
-						+ " </div></div></div>"
-						+ " <div class=\"x-box-bl\"><div class=\"x-box-br\"><div class=\"x-box-bc\"></div></div></div>"
-						+ "</div>"
-			}]
     });
 
-Ext.onReady(function(){
-	Ext.Updater.defaults.loadScripts = true;
-	
-	
-    var viewport = new Ext.Viewport({
-        layout:'border',
-        items:[POD.tabs, POD.leftColumn
-         ]
-    });
-    
+// Show the home tab only if we're configured to 
+if([% show_home_tab %]) {
+	POD.tabs.add({
+		layout :'form',
+		title : "Home",
+		id : "search-box",
+		frame :false,
+		border :false,
+		autoLoad: {
+			url : "[% root %]/home_tab_content",
+			callback : function() { POD.configSearchCombo(); },
+			loadScripts: true,
+		},
+	});
+}
 
+if("[% initial_module %]") {
+	// Display a perldoc tab on startup
+	POD.addTab("[% initial_module %]", "[% root %]/module/[% initial_module %]");
+}
 
-    
+POD.configSearchCombo = function () {
     var search = new Ext.form.ComboBox( {
     	store :POD.searchStore,
     	typeAhead :false,
@@ -291,7 +292,6 @@ Ext.onReady(function(){
     	tpl :resultTpl,
     	applyTo :Ext.getDom('search'),
     	itemSelector :'div.search-item',
-    	
         listeners: {"render": function(combo) { Memoria.Search.InstantAdd.init(combo) },
     				"collapse": function() { Memoria.Search.InstantAdd.show() },
     				"select": function(combo, record) { 
@@ -302,5 +302,13 @@ Ext.onReady(function(){
 
     });
     Ext.getDom('search').focus(100, true);
+}
 
+Ext.onReady(function(){
+    Ext.Updater.defaults.loadScripts = true;
+	
+    var viewport = new Ext.Viewport({
+        layout:'border',
+        items:[POD.tabs, POD.leftColumn]
+    });
 });

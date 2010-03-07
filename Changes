@@ -1,14 +1,18 @@
 Revision history for Catalyst-Controller-POD
 
+NEXT     2010-XX-XX
+         - Added additional configuration options:
+           expanded_module_tree, home_tab_content, initial_module,
+           show_home_tab (Tristan Pratt)
 
 0.02005  2009-11-20
          - use next instead of NEXT
-		 - Added "not found" page for namespaces like DBIx
+         - Added "not found" page for namespaces like DBIx
 
 0.02004  2009-05-04
-		 - JS cleanups
-		 - filtered results do not expand by default
-		 - moved to git repository
+         - JS cleanups
+         - filtered results do not expand by default
+         - moved to git repository
 
 0.02003  2009-05-03
          - Works with Catalyst 5.8 (reported by T. Hosaka)
