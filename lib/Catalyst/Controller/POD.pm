@@ -7,6 +7,7 @@ use File::Spec;
 use File::Slurp;
 use Pod::Simple::Search;
 use JSON::XS;
+use Path::Class::File;
 use Pod::POM;
 use XML::Simple;
 use LWP::Simple;
@@ -43,13 +44,6 @@ HTML
 =head1 NAME
 
 Catalyst::Controller::POD - Serves PODs right from your Catalyst application
-
-=head1 VERSION
-
-Version 0.02
-
-=cut
-our $VERSION = '0.02006';
 
 =head1 SYNOPSIS
 
@@ -318,16 +312,11 @@ sub _root {
 sub new {
 	my $self = shift;
 	my $new  = $self->next::method(@_);
-	my $path;
-	eval { $path = dist_file( 'Catalyst-Controller-POD', 'docs.js' ); };
-	if ($@) {
-		# I'm on my local machine
-		$path = "/Users/mo/Documents/workspace/Catalyst-Controller-POD/share";
-	} else {
-		my ( $volume, $dirs, $file ) = File::Spec->splitpath($path);
-		$path = File::Spec->catfile( $volume, $dirs );
-	}
-	$new->_dist_dir($path);
+	my $file;
+	$file = Path::Class::File->new('share/dist.js') if(-e File::Spec->catfile('share', 'docs.js'));
+	eval { $file ||= Path::Class::File->new(dist_file( 'Catalyst-Controller-POD', 'docs.js' )); };
+	$new->_dist_dir($file->dir);
+	warn $new->_dist_dir;
 	return $new;
 }
 

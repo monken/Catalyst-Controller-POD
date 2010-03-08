@@ -15,7 +15,7 @@ sub get {
     <link rel="stylesheet" href="$root/cpan.css" type="text/css" />
     <link rel="stylesheet" href="$root/docs.css" type="text/css" />
     <script type="text/javascript" src="$root/ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="$root/ext/ext-all-debug.js"></script>
+    <script type="text/javascript" src="$root/ext/ext-all.js"></script>
     </head>
     <body>
         <script type="text/javascript">Ext.BLANK_IMAGE_URL = "$root/ext/resources/images/default/s.gif";</script>
