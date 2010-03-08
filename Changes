@@ -5,6 +5,7 @@ Revision history for Catalyst-Controller-POD
            expanded_module_tree, home_tab_content, initial_module,
            show_home_tab (Tristan Pratt)
          - Added permalinks (Tristan Pratt)
+         - Update to ExtJS 3.1.1 (fixes memory leaks in browsers)
 
 0.02006  2009-11-20
          - fixed another warning (#51681)

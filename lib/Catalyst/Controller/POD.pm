@@ -13,6 +13,8 @@ use XML::Simple;
 use LWP::Simple;
 use List::MoreUtils qw(uniq);
 
+our $VERSION = 0.02007;
+
 
 
 use lib(qw(/Users/mo/Documents/workspace/Catalyst-Controller-POD/lib));
@@ -40,107 +42,6 @@ __PACKAGE__->config(
 </div>
 HTML
 );
-
-=head1 NAME
-
-Catalyst::Controller::POD - Serves PODs right from your Catalyst application
-
-=head1 SYNOPSIS
-
-Create a new controller and paste this code:
-
-  package MyApp::Controller::YourNewController;  # <-- Change this to your controller
-  
-  use strict;
-  use warnings;
-  use base 'Catalyst::Controller::POD';
-  __PACKAGE__->config(
-    inc        => 1,
-    namespaces => [qw(Catalyst::Manual*)],
-    self       => 1,
-    dirs       => [qw()]
-  );
-  1;
-
-=head1 DESCRIPTION
-
-This is a catalyst controller which serves PODs. It allows you to browse through your local
-repository of modules. On the front page of this controller is a search box
-which uses CPAN's xml interface to retrieve the results. If you click on one of them
-the POD is displayed in this application.
-
-Cross links in PODs are resolved and pop up as a new tab. If the module you clicked on is
-not installed this controller fetches the source code from CPAN and creates the pod locally.
-There is also a TOC which is always visible and scrolls the current POD to the selected section.
-
-It is written using a JavaScript framework called ExtJS (L<http://www.extjs.com>) which
-generate beautiful and intuitive interfaces.
-
-Have a look at L<http://cpan.org/authors/id/P/PE/PERLER/pod-images/pod-encyclopedia-01.png>
-
-=head1 CONFIGURATION
-
-=over
-
-=item dirs (Arrayref)
-
-Search for modules in these directories.
-
-Defaults to C<[]>.
-
-=item expanded_module_tree (Boolean)
-
-Expand the module browser tree on initial page load.
-
-Defaults to C<1>
-
-=item home_tab_content (String)
-
-HTML to be displayed in the Home tab.
-
-Defaults to the existing CPAN search box.
-
-=item inc (Boolean)
-
-Search for modules in @INC. Set it to 1 or 0.
-
-Defaults to C<0>.
-
-=item initial_module (String)
-
-If this option is specified, a tab displaying the perldoc for the given module
-will be opened on load.  Handy if you wish to disable the home tab and specify
-a specific module's perldoc as the initial page a user sees.
-
-Defaults to C<"">
-
-=item namespaces (Arrayref)
-
-Filter by namespaces. See L<Pod::Simple::Search> C<limit_glob> for syntax.
-
-Defaults to C<["*"]>
-
-=item self (Boolean)
-
-Search for modules in C<< $c->path_to( 'lib' ) >>.
-
-Defaults to C<1>.
-
-=item show_home_tab (Boolean)
-
-Show or hide the home tab.
-
-Defaults to C<1>
-
-=head1 NOTICE
-
-This module works fine for most PODs but there are a few which do not get rendered properly. 
-Please report any bug you find. See L</BUGS>.
-
-Have a look at L<Pod::Browser> which is a catalyst application running this controller. You
-can use it as a stand-alone POD server.
-
-=cut
 
 sub search : Local {
 	my ( $self, $c ) = @_;
@@ -362,13 +263,116 @@ sub _replace_template_vars {
 	$$data_ref =~ s/\[% $var_name %\]/$var_val/g;
 }
 
+1;
+
+__END__
+
+=head1 NAME
+
+Catalyst::Controller::POD - Serves PODs right from your Catalyst application
+
+=head1 SYNOPSIS
+
+Create a new controller and paste this code:
+
+  package MyApp::Controller::YourNewController;  # <-- Change this to your controller
+  
+  use strict;
+  use warnings;
+  use base 'Catalyst::Controller::POD';
+  __PACKAGE__->config(
+    inc        => 1,
+    namespaces => [qw(Catalyst::Manual*)],
+    self       => 1,
+    dirs       => [qw()]
+  );
+  1;
+
+=head1 DESCRIPTION
+
+This is a catalyst controller which serves PODs. It allows you to browse through your local
+repository of modules. On the front page of this controller is a search box
+which uses CPAN's xml interface to retrieve the results. If you click on one of them
+the POD is displayed in this application.
+
+Cross links in PODs are resolved and pop up as a new tab. If the module you clicked on is
+not installed this controller fetches the source code from CPAN and creates the pod locally.
+There is also a TOC which is always visible and scrolls the current POD to the selected section.
+
+It is written using a JavaScript framework called ExtJS (L<http://www.extjs.com>) which
+generate beautiful and intuitive interfaces.
+
+Have a look at L<http://cpan.org/authors/id/P/PE/PERLER/pod-images/pod-encyclopedia-01.png>
+
+=head1 CONFIGURATION
+
+=over
+
+=item dirs (Arrayref)
+
+Search for modules in these directories.
+
+Defaults to C<[]>.
+
+=item expanded_module_tree (Boolean)
+
+Expand the module browser tree on initial page load.
+
+Defaults to C<1>
+
+=item home_tab_content (String)
+
+HTML to be displayed in the Home tab.
+
+Defaults to the existing CPAN search box.
+
+=item inc (Boolean)
+
+Search for modules in @INC. Set it to 1 or 0.
+
+Defaults to C<0>.
+
+=item initial_module (String)
+
+If this option is specified, a tab displaying the perldoc for the given module
+will be opened on load.  Handy if you wish to disable the home tab and specify
+a specific module's perldoc as the initial page a user sees.
+
+Defaults to C<"">
+
+=item namespaces (Arrayref)
+
+Filter by namespaces. See L<Pod::Simple::Search> C<limit_glob> for syntax.
+
+Defaults to C<["*"]>
+
+=item self (Boolean)
+
+Search for modules in C<< $c->path_to( 'lib' ) >>.
+
+Defaults to C<1>.
+
+=item show_home_tab (Boolean)
+
+Show or hide the home tab.
+
+Defaults to C<1>
+
+=head1 NOTICE
+
+This module works fine for most PODs but there are a few which do not get rendered properly. 
+Please report any bug you find. See L</BUGS>.
+
+Have a look at L<Pod::Browser> which is a catalyst application running this controller. You
+can use it as a stand-alone POD server.
+
 =head1 TODO
 
 Write more tests!
 
 =head1 AUTHOR
 
-Moritz Onken <onken@houseofdesign.de>
+Moritz Onken <onken@netcubed.de>
 
 =head1 CONTRIBUTORS
 
@@ -425,4 +429,3 @@ under the same terms as Perl itself.
 
 
 =cut
-1;    # End of Catalyst::Controller::POD
