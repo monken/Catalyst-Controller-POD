@@ -310,14 +310,13 @@ sub _root {
 }
 
 sub new {
-	my $self = shift;
-	my $new  = $self->next::method(@_);
+	my $class = shift;
+	my $self  = $class->next::method(@_);
 	my $file;
-	$file = Path::Class::File->new('share/dist.js') if(-e File::Spec->catfile('share', 'docs.js'));
+	$file = Path::Class::File->new('share', 'dist.js');
 	eval { $file ||= Path::Class::File->new(dist_file( 'Catalyst-Controller-POD', 'docs.js' )); };
 	$new->_dist_dir($file->dir);
-	warn $new->_dist_dir;
-	return $new;
+	return $self;
 }
 
 sub index : Path : Args(0) {
