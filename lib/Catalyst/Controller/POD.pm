@@ -215,9 +215,9 @@ sub new {
     my $self  = $class->next::method(@_);
     my $file  = Path::Class::File->new( 'share', 'dist.js' );
     eval {
-        $file ||= Path::Class::File->new(
+        $file = Path::Class::File->new(
             dist_file( 'Catalyst-Controller-POD', 'docs.js' ) );
-    };
+    } unless(-e $file);
     $self->_dist_dir( $file->dir );
     return $self;
 }
