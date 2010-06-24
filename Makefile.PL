@@ -24,6 +24,7 @@ requires 'Catalyst::Controller'  => 0;
 requires 'Pod::POM::View::TOC'   => "0.02";
 requires 'parent'                => 0;
 requires 'Path::Class::File' => 0;
+requires 'Catalyst::Plugin::Static::Simple' => 0;
 
 test_requires 'Test::More'     => '0.42';
 test_requires 'Test::WWW::Mechanize::Catalyst' => "0.41";
