@@ -58,7 +58,7 @@ sub view_pod {
 <div class="pod">
 ~
    . $pod->content->present($self)
-        . "</div></body></html>\n";
+        . "<script>prettyPrint()</script></div></body></html>\n";
 }
 
 sub view_verbatim {
@@ -84,7 +84,7 @@ sub view_verbatim {
         last if($last);
     }
 
-    return "<pre>$text</pre>\n\n";
+    return "<pre class=\"prettyprint lang-perl\">$text</pre>\n\n";
 }
 
 sub view_seq_link_transform_path {
