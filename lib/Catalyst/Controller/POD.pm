@@ -17,7 +17,7 @@ use Catalyst::Controller::POD::Template;
 
 use base "Catalyst::Controller";
 
-__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree));
+__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree pretty_print));
 
 __PACKAGE__->config(
  self                 => 1,
@@ -25,6 +25,7 @@ __PACKAGE__->config(
  initial_module       => "",
  show_home_tab        => 1,
  expanded_module_tree => 0,
+ pretty_print         => 1,
  home_tab_content     => <<HTML,
 <div style="width:500px; margin:50px" class='x-box-blue' id='move-me'>
 <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
@@ -81,6 +82,7 @@ sub module : Local {
 	my $parser = Pod::POM->new( warn => 0 );
 	$view->_root( $self->_root($c) );
 	$view->_module($module);
+	$view->_pretty_print($self->pretty_print() );
 	my $pom;
 
 	if ( $name2path->{$module} ) {
@@ -348,6 +350,14 @@ Defaults to C<1>.
 Show or hide the home tab.
 
 Defaults to C<1>
+
+=item pretty_print (Boolean)
+
+Prettify any code sections found in the POD.
+
+Defaults to C<1>
+
+=back
 
 =head1 NOTICE
 
