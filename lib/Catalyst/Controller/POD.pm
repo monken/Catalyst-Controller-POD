@@ -203,7 +203,11 @@ sub _root {
 	my ( $self, $c ) = @_;
 	my $index = $c->uri_for( __PACKAGE__->config->{path} );
 
-	#$index  =~ s/\/index//g;
+    # remove trailing slash if there is one
+    if ($index =~ m{(^.*)/$}) {
+        $index = $1;
+    }
+
 	return $index;
 }
 
@@ -223,6 +227,7 @@ sub new {
 sub index : Path : Args(0) {
 	my ( $self, $c ) = @_;
 	$c->res->content_type('text/html; charset=utf-8');
+
 	$c->response->body(
 		Catalyst::Controller::POD::Template->get(
 			$self->_root($c) . "/static"
