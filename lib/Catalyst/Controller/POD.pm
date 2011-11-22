@@ -14,6 +14,7 @@ use XML::Simple;
 use LWP::Simple;
 use List::MoreUtils qw(uniq);
 use Catalyst::Controller::POD::Template;
+use Pod::POM::View::TOC;
 
 use base "Catalyst::Controller";
 
