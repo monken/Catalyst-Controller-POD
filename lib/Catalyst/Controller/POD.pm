@@ -18,7 +18,7 @@ use Pod::POM::View::TOC;
 
 use base "Catalyst::Controller";
 
-__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree pretty_print));
+__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree pretty_print title));
 
 __PACKAGE__->config(
  self                 => 1,
@@ -27,6 +27,7 @@ __PACKAGE__->config(
  show_home_tab        => 1,
  expanded_module_tree => 0,
  pretty_print         => 1,
+ title                => 'Pod::Browser',
  home_tab_content     => <<HTML,
 <div style="width:500px; margin:50px" class='x-box-blue' id='move-me'>
 <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
@@ -231,7 +232,8 @@ sub index : Path : Args(0) {
 
 	$c->response->body(
 		Catalyst::Controller::POD::Template->get(
-			$self->_root($c) . "/static"
+			$self->_root($c) . "/static",
+			$self->title(),
 		)
 	);
 }
@@ -362,6 +364,12 @@ Defaults to C<1>
 Prettify any code sections found in the POD.
 
 Defaults to C<1>
+
+=item title (String)
+
+The title for all pages.
+
+Defaults to C<Pod::Browser>
 
 =back
 

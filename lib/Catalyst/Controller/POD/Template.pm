@@ -4,12 +4,13 @@ use utf8;
 
 sub get {
     my $class = shift;
-    my $root = shift;
+    my $root  = shift;
+    my $title = shift;
     return << "DATA"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
-    <title>Pod::Browser</title>
+    <title>$title</title>
 
     <link rel="stylesheet" type="text/css" href="$root/ext/resources/css/ext-all.css" />
     <link rel="stylesheet" href="$root/cpan.css" type="text/css" />
