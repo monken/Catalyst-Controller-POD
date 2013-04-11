@@ -7,7 +7,6 @@ sub get {
     my $root  = shift;
     my $title = shift;
     return << "DATA"
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
