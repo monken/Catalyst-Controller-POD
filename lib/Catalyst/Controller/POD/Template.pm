@@ -9,7 +9,7 @@ sub get {
     return << "DATA"
 <html>
     <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1">
     <title>$title</title>
 
     <link rel="stylesheet" type="text/css" href="$root/ext/resources/css/ext-all.css" />
