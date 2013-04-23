@@ -119,7 +119,7 @@ POD.tree = new Ext.tree.TreePanel({
 
 var root = new Ext.tree.AsyncTreeNode({
     text: 'mods',
-    expanded:true,
+    expanded:true
 });
 
 POD.tree.setRootNode(root);
@@ -278,7 +278,7 @@ POD.tabs = new Ext.TabPanel({
                 tabs.items.each(function(el){if(new RegExp("tab-").test(el.id)) tabs.remove(el)})
             }
         }
-    ],
+    ]
 });
 
 //
@@ -302,8 +302,8 @@ if([% show_home_tab %]) {
         autoLoad: {
             url: "[% root %]/home_tab_content",
             callback: function() { POD.configSearchCombo(); },
-            loadScripts: true,
-        },
+            loadScripts: true
+        }
     });
 }
 

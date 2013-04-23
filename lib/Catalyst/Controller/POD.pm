@@ -14,10 +14,11 @@ use XML::Simple;
 use LWP::Simple;
 use List::MoreUtils qw(uniq);
 use Catalyst::Controller::POD::Template;
+use Pod::POM::View::TOC;
 
 use base "Catalyst::Controller";
 
-__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree));
+__PACKAGE__->mk_accessors(qw(_dist_dir inc namespaces self dir show_home_tab initial_module home_tab_content expanded_module_tree pretty_print title));
 
 __PACKAGE__->config(
  self                 => 1,
@@ -25,6 +26,8 @@ __PACKAGE__->config(
  initial_module       => "",
  show_home_tab        => 1,
  expanded_module_tree => 0,
+ pretty_print         => 1,
+ title                => 'Pod::Browser',
  home_tab_content     => <<HTML,
 <div style="width:500px; margin:50px" class='x-box-blue' id='move-me'>
 <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
@@ -81,6 +84,7 @@ sub module : Local {
 	my $parser = Pod::POM->new( warn => 0 );
 	$view->_root( $self->_root($c) );
 	$view->_module($module);
+	$view->_pretty_print($self->pretty_print() );
 	my $pom;
 
 	if ( $name2path->{$module} ) {
@@ -201,7 +205,11 @@ sub _root {
 	my ( $self, $c ) = @_;
 	my $index = $c->uri_for( __PACKAGE__->config->{path} );
 
-	#$index  =~ s/\/index//g;
+    # remove trailing slash if there is one
+    if ($index =~ m{(^.*)/$}) {
+        $index = $1;
+    }
+
 	return $index;
 }
 
@@ -221,9 +229,11 @@ sub new {
 sub index : Path : Args(0) {
 	my ( $self, $c ) = @_;
 	$c->res->content_type('text/html; charset=utf-8');
+
 	$c->response->body(
 		Catalyst::Controller::POD::Template->get(
-			$self->_root($c) . "/static"
+			$self->_root($c) . "/static",
+			$self->title(),
 		)
 	);
 }
@@ -348,6 +358,20 @@ Defaults to C<1>.
 Show or hide the home tab.
 
 Defaults to C<1>
+
+=item pretty_print (Boolean)
+
+Prettify any code sections found in the POD.
+
+Defaults to C<1>
+
+=item title (String)
+
+The title for all pages.
+
+Defaults to C<Pod::Browser>
+
+=back
 
 =head1 NOTICE
 

@@ -14,9 +14,9 @@ $mech->content_contains("here I am");
 $mech->get_ok("/");
 $mech->content_contains("Pod::Browser");
 
-$mech->content_contains("http://localhost//static/docs.css", "correct root directory");
+$mech->content_contains("http://localhost/static/docs.css", "correct root directory");
 
-$mech->get_ok("http://localhost//static/docs.css");
+$mech->get_ok("http://localhost/static/docs.css");
 $mech->content_contains(".pod ol");
 
 

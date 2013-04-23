@@ -32,6 +32,16 @@ sub _toc {
     }
     return $self->{_toc};
 }
+sub _pretty_print {
+
+    no strict 'refs';
+    my $self = shift;
+    if(@_) {
+        $self->{_pretty_print} = $_[0];
+    }
+
+    return $self->{_pretty_print};
+}
 
 sub view_begin {
     my ($self, $begin) = @_;
@@ -46,6 +56,12 @@ sub view_pod {
     my ($self, $pod) = @_;
     my $toc = $self->_toc;
     my $permalink = $self->_root . "?permalink=" . $self->_module; # There has to be a better way
+
+    my $pp_script_tag = '';
+    if ($self->_pretty_print) {
+        $pp_script_tag = '<script>prettyPrint()</script>';
+    }
+
     return qq~
 <html>
 <head>
@@ -58,7 +74,8 @@ sub view_pod {
 <div class="pod">
 ~
    . $pod->content->present($self)
-        . "<script>prettyPrint()</script></div></body></html>\n";
+   . $pp_script_tag
+   . "</div></body></html>\n";
 }
 
 sub view_verbatim {
