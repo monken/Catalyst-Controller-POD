@@ -42,7 +42,7 @@ sub search : Local {
 	my ( $self, $c ) = @_;
 	my $k = $c->req->param("value");
 	my $s = $c->req->param("start");
-	my $url = new URI("http://search.cpan.org/search");
+	my $url = URI("http://search.cpan.org/search")->new;
 	$url->query_form_hash(
 		query  => $k,
 		mode   => "module",
@@ -50,7 +50,7 @@ sub search : Local {
 		format => "xml",
 		s      => $s
 	);
-	my $ua = new LWP::UserAgent;
+	my $ua = LWP::UserAgent->new;
 	$ua->timeout(15);
 	$c->log->debug("get url ".$url->canonical) if($c->debug);
 	my $response = $ua->get($url);
@@ -63,7 +63,7 @@ sub search : Local {
 	}
 	my $output = {count => $data->{matches}};
 	while(my($k,$v) = each %{$output->{module}}) {
-		
+
 	}
 	$c->res->body(encode_json($data));
 }
@@ -161,7 +161,7 @@ sub modules : Local {
 				%{$name2path}, %{$found}
 			);
 		}
-	
+
 	my @modules;
 	while ( my ( $k, $v ) = each %$name2path ) {
 		next if($find && $k !~ /\Q$find\E/ig);
@@ -250,7 +250,7 @@ sub static : Path("static") {
 	}
 }
 
-# A poor man's template module. 
+# A poor man's template module.
 sub _replace_template_vars {
 	my ($data_ref, $var_name, $var_val) = @_;
 	$$data_ref =~ s/\[% $var_name %\]/$var_val/g;
@@ -265,7 +265,7 @@ __END__
 Create a new controller and paste this code:
 
   package MyApp::Controller::YourNewController;  # <-- Change this to your controller
-  
+
   use strict;
   use warnings;
   use base 'Catalyst::Controller::POD';
@@ -351,7 +351,7 @@ Defaults to C<1>
 
 =head1 NOTICE
 
-This module works fine for most PODs but there are a few which do not get rendered properly. 
+This module works fine for most PODs but there are a few which do not get rendered properly.
 Please report any bug you find. See L</BUGS>.
 
 Have a look at L<Pod::Browser> which is a catalyst application running this controller. You
