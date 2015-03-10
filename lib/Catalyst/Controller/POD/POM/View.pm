@@ -89,10 +89,10 @@ sub view_verbatim {
 
 sub view_seq_link_transform_path {
     my($self,$page) = @_;
-    return $self->_root."/module/$page";  
+    return $self->_root."/module/$page";
 }
-{ 
-    no warnings 'redefine';
+{
+    no warnings 'redefine'; ## no critic
     sub Pod::POM::View::HTML::make_href  {
         my($url, $title) = @_;
     	if (!defined $url) {

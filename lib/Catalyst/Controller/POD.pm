@@ -1,19 +1,21 @@
 package Catalyst::Controller::POD;
 # ABSTRACT: Serves PODs right from your Catalyst application
-use warnings;
+
 use strict;
+use warnings;
+
+use Catalyst::Controller::POD::Template;
 use File::Find qw( find );
 use File::ShareDir qw( dist_file );
-use File::Spec;
 use File::Slurp;
-use Pod::Simple::Search;
+use File::Spec;
 use JSON::XS;
-use Path::Class::File;
-use Pod::POM;
-use XML::Simple;
 use LWP::Simple;
 use List::MoreUtils qw(uniq);
-use Catalyst::Controller::POD::Template;
+use Path::Class::File;
+use Pod::POM;
+use Pod::Simple::Search;
+use XML::Simple;
 
 use base "Catalyst::Controller";
 
