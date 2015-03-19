@@ -1,5 +1,8 @@
 package Catalyst::Controller::POD::Template;
 
+use strict;
+use warnings;
+
 use utf8;
 
 sub get {

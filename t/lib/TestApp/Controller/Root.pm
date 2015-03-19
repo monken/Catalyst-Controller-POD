@@ -10,6 +10,8 @@ sub test : Local {
     my ( $self, $c ) = @_;
 
     $c->response->body( "here I am" );
+
+    return;
 }
 
 
